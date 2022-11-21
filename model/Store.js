@@ -7,7 +7,13 @@ const storeSchema = new Schema({
             required: true,
             trim: true
     },
-    telefono: {
+    direction: {
+        type: String,
+        min: 0,
+        required: true,
+        trim: true,
+    },
+    telephone: {
         type: String, 
         required: false,
         trim: true
@@ -17,12 +23,6 @@ const storeSchema = new Schema({
         required: false,
         trim: true
     },
-    direction: {
-        type: String,
-        min: 0,
-        required: true,
-        trim: true,
-    }
 });
 
 const Store = mongoose.model('Store', storeSchema);

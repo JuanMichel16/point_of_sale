@@ -3,16 +3,11 @@ const { Schema } = mongoose;
 
 const productSchema = new Schema({
     name: {
-            type: String, 
-            required: true,
-            trim: true
-    },
-    description: {
         type: String, 
-        required: false,
+        required: true,
         trim: true
     },
-    image: {
+    description: {
         type: String, 
         required: false,
         trim: true
@@ -37,7 +32,12 @@ const productSchema = new Schema({
         type: Number, 
         required: true,
         trim: true
-    }
+    },
+    image: {
+        type: String, 
+        required: false,
+        trim: true
+    },
 });
 
 const Product = mongoose.model('Product', productSchema);
