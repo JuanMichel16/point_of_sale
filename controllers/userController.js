@@ -10,7 +10,7 @@ const registrar = async (req, res) => {
     // console.log(firstName, lastName, userName, password, email, rol); //Para leer los parametros enviados
 
     // Prevenir usuarios duplicados
-    const existsUser = await User.findOne({email});
+    const existsUser = await User.findOne({email});     
 
     if(existsUser) {
         const error = new Error('Usuario ya registrado');
@@ -88,6 +88,7 @@ const olvidePassword = async (req, res) => {
 
     // Verificar si el usuario existe con base en su email. Si no encuentra un usuario con el email retorna null, pero en caso de que si lo encuentre pues retorna el usuario de la DB
     const existsUser = await User.findOne({email});
+    
     if(!existsUser) {
         const error = new Error("El usuario no existe");
         res.status(400).json({msg: error.message});

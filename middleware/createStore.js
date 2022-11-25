@@ -1,4 +1,3 @@
-import { json } from "express";
 import Store from "../model/Store.js";
 
 const createStore = async (req, res, next) => {
@@ -11,6 +10,7 @@ const createStore = async (req, res, next) => {
         try {
             const store = new Store(storeData);
             const storeSave = await store.save();
+            return next();
 
         } catch(error) {
             console.log(error);
