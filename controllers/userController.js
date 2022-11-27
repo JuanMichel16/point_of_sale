@@ -51,7 +51,6 @@ const confirmar = async (req, res) => {
         res.json({msg: "Usuario confirmado correctamente"});
 
     } catch(error) {
-
         console.log(error)
     }
 }
