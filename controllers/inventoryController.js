@@ -7,9 +7,9 @@ const getInventory = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
+    const product = new Product(req.body);
 
     try {
-        const product = new Product(req.body);
         const productSaved = await product.save();
         
         res.json(productSaved);
@@ -70,13 +70,11 @@ const deleteProduct = async (req, res) => {
 
     try {
         await productDeleted.deleteOne({_id: id});
-
         res.json(productDeleted);
     } catch (error) {
         console.log(productDeleted);
     }
 }
-
 
 export {
     getInventory,
