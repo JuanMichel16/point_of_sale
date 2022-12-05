@@ -5,15 +5,10 @@ import generarId from '../helpers/generarId.js';
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    firstName: {
+    name: {
             type: String, 
             required: true,
             trim: true
-    },
-    lastName: {
-        type: String, 
-        required: false,
-        trim: true
     },
     userName: {
         type: String, 
