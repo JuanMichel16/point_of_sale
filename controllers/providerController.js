@@ -8,11 +8,17 @@ const getProviders = async (req, res) => {
 
 const addProvider= async (req, res) => {
 
-    const provider = new Provider(req.body);
+    const {email} = req.body;
+    const providerExists = await Provider.findOne({email});
+
+    if(providerExists) {
+        const error = new Error("Ya existe un proveedor con ese correo")
+        return res.status(403).json({msg: error.message});
+    }
 
     try {
+        const provider = Provider(req.body);
         const providerSaved = await provider.save();
-        
         res.json(providerSaved);
     } catch (error) {
         console.log(error);
@@ -25,7 +31,6 @@ const getProvider = async (req, res) => {
 
     const providerDetail = await Provider.findById(id);
     // console.log(productDetail);
-
     res.json(providerDetail);
 
 }
@@ -55,8 +60,6 @@ const updateProvider = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-
-
 }
 
 const deleteProvider = async (req, res) => {
@@ -76,7 +79,6 @@ const deleteProvider = async (req, res) => {
         console.log(error);
     }
 }
-
 
 export {
     getProviders,

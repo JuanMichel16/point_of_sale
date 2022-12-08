@@ -16,6 +16,6 @@ import {
 router.route("/").get(isAuth, getProviders).post(isAuth, addProvider);
 
 // Productos en especifico
- router.route("/:id").get( isAuth, getProvider).put(isAuth, updateProvider).delete(isAuth, deleteProvider)
+ router.route("/:id").get( isAuth, getProvider).put(isAuth, updateProvider).delete(isAuth, deleteProvider);
 
 export default router;

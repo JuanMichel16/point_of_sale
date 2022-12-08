@@ -15,7 +15,7 @@ dotenv.config(); //Buscar dentro del archivo de variables de entorno
 
 connectDB();
 
-var whitelist = ['http://localhost:5173']
+var whitelist = [`${process.env.FRONTEND_URL}`]
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {

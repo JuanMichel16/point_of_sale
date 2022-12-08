@@ -24,7 +24,6 @@ router.post("/olvide-password", olvidePassword); //Validar email del usuario
 router.route("/olvide-password/:token").get(comprobarToken).post(nuevoPassword)
 
 
-
 // Area privada, necesitas autenticarte para poder ver estas rutas
 router.get("/perfil", isAuth, perfil);
 

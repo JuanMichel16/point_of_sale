@@ -8,12 +8,15 @@ const addSale = async (req, res) => {
         sale: 1
     };
 
-    const newSale = new Sale(req.body);
-    newSale.user = req.user._id;
-    await newSale.save();
-    newSale.saleDetail.push(productoNuevo);
-
-    console.log(newSale.saleDetail);
+    try {
+        const newSale = Sale(req.body);
+        newSale.user = req.user._id;
+        newSale.saleDetail.push(productoNuevo);
+        const saleSaved = await newSale.save();
+        res.json(saleSaved);
+    } catch (error) {
+        console.log(error);
+    }
 
 }
 

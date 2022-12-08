@@ -1,11 +1,13 @@
 import User from "../model/User.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarId from "../helpers/generarId.js";
+import emailRegistro from "../helpers/emailRegistro.js";
+import emailOlvidePassword from "../helpers/emailOlvidePassword.js";
 
 
 const registrar = async (req, res) => {
 
-    const { email } = req.body;
+    const { email, name } = req.body;
     // const {firstName, lastName, userName, password, email, rol } = req.body;
     // console.log(firstName, lastName, userName, password, email, rol); //Para leer los parametros enviados
 
@@ -20,18 +22,26 @@ const registrar = async (req, res) => {
     try {
         // guardar nuevo veterinario
         const user = new User(req.body);
-        const veterinarioGuardado = await user.save();
-        res.json(veterinarioGuardado);
+        const userGuardado = await user.save();
+
+        // Enviar email
+        emailRegistro({
+            name,
+            email,
+            token: userGuardado.token
+        })
+
+        res.json(userGuardado);
         
     } catch (error) {
-        console.log(error);
+        console.log(`ojo ${error}`);
     }
 }
 
 const perfil = (req, res) => {
     const {user} = req;
 
-    res.json({perfil: user})
+    res.json(user)
 }
 
 const confirmar = async (req, res) => {
@@ -40,7 +50,7 @@ const confirmar = async (req, res) => {
 
     if(!usuarioConfirmar) {
         const error = new Error("Token no Valido");
-        res.status(404).json({mgs: error.message});
+        res.status(404).json({msg: error.message});
     }
 
     try {
@@ -58,27 +68,35 @@ const confirmar = async (req, res) => {
 const autenticar = async (req, res) => {
 
     const {email, password} = req.body;
-
     const user = await User.findOne({ email });
+    console.log(user);
 
     // Validar si el usuario existe
     if(!user) {
         const error = new Error("El usuario no existe")
-        res.status(403).json({msg: error.message});
+        return res.status(404).json({msg: error.message});
     }
 
     //Validar si el usuario esta confirmado
-    if(!(user.confirmado)) {
+    if(!user.confirmado) {
         const error = new Error("El usuario no esta confirmado");
-        res.status(403).json({msg: error.message});
+        return res.status(403).json({msg: error.message});
     }
 
     // Autenticar el usuario
     if(await user.comprobarUsuarioPassword(password)) {
-        res.json({token: generarJWT(user.id)})
+        res.json({
+            _id: user._id,
+            name: user.name,
+            userName: user.userName,
+            email: user.email,
+            rol: user.rol,
+            token: generarJWT(user.id)
+
+        })
     } else {
         const error = new Error("El password es incorrecto");
-        res.status(403).json({msg: error.message});
+        return res.status(403).json({msg: error.message});
     }
 }
 
@@ -96,6 +114,13 @@ const olvidePassword = async (req, res) => {
     try {
         existsUser.token = generarId();
         await existsUser.save();
+
+        //enviar email
+        emailOlvidePassword({
+            name: existsUser.name,
+            email,
+            token: existsUser.token
+        })
 
         res.json({msg: "Hemos enviado un email con las instrucciones"})
     } catch (error) {
@@ -135,7 +160,7 @@ const nuevoPassword = async (req, res) => {
         user.password = password;
         await user.save();
 
-        res.json({mgs: "Password modificado correctamente"})
+        res.json({msg: "Password modificado correctamente"})
     } catch (error) {
         console.log(error);
     }

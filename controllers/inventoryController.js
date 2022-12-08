@@ -21,10 +21,8 @@ const addProduct = async (req, res) => {
 const getProduct = async (req, res) => {
     const { id } = req.params;
     // console.log(id);
-
     const productDetail = await Product.findById(id);
     // console.log(productDetail);
-
     res.json(productDetail);
 
 }
